@@ -49,10 +49,10 @@ JSON
     "configurations": [
         {
             "type": "java",
-            "name": "Run Guest Service",
+            "name": "Run Guest Service", # change this according to your part ( eg: Run Reservation System ) 
             "request": "launch",
             "mainClass": "com.smarthotel.guest_service.GuestServiceApplication",
-            "projectName": "02-guest-service",
+            "projectName": "02-guest-service", # for example
             "env": {
                 "DB_PASSWORD": "YOUR_REAL_PASSWORD_HERE"
             }
