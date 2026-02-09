@@ -20,11 +20,11 @@ Open **MySQL Workbench** or **phpMyAdmin** and run these commands to create empt
 ```sql
 CREATE DATABASE guest_db;       -- For Guest Service
 CREATE DATABASE room_db;        -- For Room Management
-CREATE DATABASE reservation_db  -- For Reservation System
-CREATE DATABASE resturent_db    -- For Resturent & Dining
-CREATE DATABASE staff_db        -- For Staff Management
-CREATE DATABASE housekeeping_db -- For Housekeeping management
-CREATE DATABASE billing_db      -- For Billing & Invoicing System
+CREATE DATABASE reservation_db;  -- For Reservation System
+CREATE DATABASE resturent_db;    -- For Resturent & Dining
+CREATE DATABASE staff_db;        -- For Staff Management
+CREATE DATABASE housekeeping_db; -- For Housekeeping management
+CREATE DATABASE billing_db;      -- For Billing & Invoicing System
 CREATE DATABASE inventory_db;   -- For Inventory & Stock Management
 
 Note: Do NOT create tables manually. The application will create them automatically.
