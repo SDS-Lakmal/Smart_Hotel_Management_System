@@ -35,7 +35,7 @@ We do NOT put passwords inside the code. We use an Environment Variable (DB_PASS
 Follow these steps exactly:
 Open the project in VS Code.
 
-Click on the Run and Debug icon on the left sidebar (looks like a bug 🐞 with a play button).
+Click on the Run and Debug icon on the left sidebar (looks like a bug 🐞 with a play button or click on Ctrl + Shift + D shortcut).
 
 Click on the blue link that says "create a launch.json file".
 
