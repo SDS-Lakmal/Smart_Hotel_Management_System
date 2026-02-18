@@ -1,64 +1,205 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect } from "react";
 
-export default function Home() {
+export default function GuestManagement() {
+  // --- STATE ---
+  const [view, setView] = useState("checkin");
+  const [guests, setGuests] = useState<any[]>([]); // Guest List
+  const [stats, setStats] = useState({ total: 0, today: 0 }); // Real Stats
+
+  // Form Data
+  const [formData, setFormData] = useState({
+    name: "",
+    nic: "",
+    email: "",
+    phone: "",
+  });
+
+  const [status, setStatus] = useState({ type: "", message: "" });
+  const [isLoading, setIsLoading] = useState(false);
+
+  // --- FUNCTIONS ---
+
+  // 1. Load Data & Calculate Stats
+  const fetchGuestsAndStats = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/guests");
+      if (response.ok) {
+        const data = await response.json();
+        setGuests(data);
+
+        // --- REAL TIME CALCULATIONS ---
+        // 1. Total Guests
+        const totalCount = data.length;
+
+        // 2. Today's Arrivals (Filter by Date)
+        const todayStr = new Date().toISOString().split('T')[0]; // Get "2023-10-25" format
+        const todayCount = data.filter((g: any) => 
+          g.checkInTime && g.checkInTime.startsWith(todayStr)
+        ).length;
+
+        setStats({ total: totalCount, today: todayCount });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Page Load වෙද්දී Data ගන්න
+  useEffect(() => {
+    fetchGuestsAndStats();
+  }, []);
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setStatus({ type: "loading", message: "Processing Check-In..." });
+
+    try {
+      const response = await fetch("http://localhost:8080/api/guests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus({ type: "success", message: "🎉 Guest Checked-In Successfully!" });
+        setFormData({ name: "", nic: "", email: "", phone: "" });
+        fetchGuestsAndStats(); // Refresh stats immediately
+      } else {
+        setStatus({ type: "error", message: "❌ Check-In Failed." });
+      }
+    } catch (error) {
+      setStatus({ type: "error", message: "⚠️ Server Error." });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-slate-50 flex font-sans">
+      {/* SIDEBAR */}
+      <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col shadow-2xl">
+        <div className="p-6 border-b border-slate-800">
+          <h1 className="text-2xl font-bold text-blue-400">SMART HOTEL</h1>
+          <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">Guest Manager</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        <nav className="mt-6 flex-1">
+          <button onClick={() => setView("checkin")} className={`w-full flex items-center py-4 px-6 ${view === "checkin" ? "bg-blue-600 border-r-4 border-blue-300" : "text-slate-400 hover:bg-slate-800"}`}>
+            <span className="font-medium">Guest Check-In</span>
+          </button>
+          <button onClick={() => setView("history")} className={`w-full flex items-center py-4 px-6 ${view === "history" ? "bg-blue-600 border-r-4 border-blue-300" : "text-slate-400 hover:bg-slate-800"}`}>
+            <span className="font-medium">Guest History</span>
+          </button>
+        </nav>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800">{view === "checkin" ? "Guest Registration" : "Guest Database"}</h2>
+            <p className="text-slate-500 text-sm mt-1">Real-time System Status</p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm font-bold text-slate-700">Reception Desk</p>
+            <p className="text-xs text-green-600 font-semibold">● Online</p>
+          </div>
+        </header>
+
+        {view === "checkin" && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* FORM */}
+            <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+              <h3 className="font-semibold text-slate-700 mb-6 border-b pb-2">New Guest Entry</h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase">Full Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. Kasun Perera" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase">NIC / Passport</label>
+                    <input type="text" name="nic" value={formData.nic} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="ID Number" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase">Email</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email Address" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase">Phone</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Phone Number" />
+                  </div>
+                </div>
+                {status.message && <div className={`p-3 rounded text-sm font-medium ${status.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{status.message}</div>}
+                <button type="submit" disabled={isLoading} className="w-full py-3 rounded-lg text-white font-bold bg-blue-600 hover:bg-blue-700 transition">{isLoading ? "Processing..." : "Check-In Guest"}</button>
+              </form>
+            </div>
+
+            {/* REAL STATS PANEL */}
+            <div className="lg:col-span-1 space-y-6">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h4 className="text-slate-500 text-xs font-bold uppercase mb-4 border-b pb-2">Today's Summary</h4>
+                
+                {/* 1. New Arrivals / Today */}
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-slate-600 font-medium">New Arrivals / Today</span>
+                  <span className="font-bold text-white text-lg bg-green-500 px-3 py-1 rounded shadow-sm">
+                    {stats.today}
+                  </span>
+                </div>
+
+                {/* 2. Total Guests */}
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-600 font-medium">Total Guests</span>
+                  <span className="font-bold text-slate-800 text-lg bg-slate-100 px-3 py-1 rounded border border-slate-200">
+                    {stats.total}
+                  </span>
+                </div>
+
+              </div>
+              
+              <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 text-sm text-blue-800">
+                💡 <b>System Note:</b> These counts are updated in real-time from the database.
+              </div>
+            </div>
+          </div>
+        )}
+
+        {view === "history" && (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="font-semibold text-slate-700">All Registered Guests</h3>
+              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded font-bold">Total: {guests.length}</span>
+            </div>
+            <table className="w-full text-left">
+              <thead className="bg-slate-100 text-slate-500 text-xs uppercase">
+                <tr>
+                  <th className="px-6 py-3">ID</th>
+                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">NIC</th>
+                  <th className="px-6 py-3">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {guests.map((g: any) => (
+                  <tr key={g.guestId} className="hover:bg-blue-50">
+                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">#{g.guestId}</td>
+                    <td className="px-6 py-3 font-medium text-slate-800">{g.name}</td>
+                    <td className="px-6 py-3 text-slate-600 text-sm">{g.nic}</td>
+                    <td className="px-6 py-3 text-slate-400 text-xs">
+                      {g.checkInTime ? new Date(g.checkInTime).toLocaleDateString() : "N/A"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </main>
     </div>
   );
