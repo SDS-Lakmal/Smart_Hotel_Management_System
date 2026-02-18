@@ -105,4 +105,6 @@ Create a new branch for your features.
 
 Do not commit .vscode folder or .env files.
 
+Front end
+
 Happy Coding! 💻
