@@ -105,6 +105,33 @@ Create a new branch for your features.
 
 Do not commit .vscode folder or .env files.
 
+FRONT END
+
+1. Primary Brand Color
+
+Use for: Buttons, Active Links, Highlights, Icons.
+Tailwind Class: bg-blue-600 / text-blue-600
+Hex Code: #2563EB (Royal Blue)
+
+2. Sidebar & Navigation
+
+Use for: Left Sidebar Background, Footer.
+Tailwind Class: bg-slate-900
+Hex Code: #0F172A (Dark Slate)
+
+3. Page Background
+
+Use for: Main Content Background
+Tailwind Class: bg-slate-50
+Hex Code: #F8FAFC (Very Light Grey)
+
+4. Text Colors
+
+Headings: text-slate-800 (#1E293B)
+Normal Text: text-slate-600 (#475569)
+Muted/Small Text: text-slate-400 (#94A3B8)
+
+
 
 
 Happy Coding! 💻
