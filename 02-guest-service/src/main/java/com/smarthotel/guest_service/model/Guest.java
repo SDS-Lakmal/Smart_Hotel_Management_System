@@ -1,13 +1,13 @@
 package com.smarthotel.guest_service.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime; // 1. වෙලාව වැඩ කරන්න මේක Import කළා
+import java.time.LocalDateTime; // 1. Imported this to make time work
 
 @Entity // database table
 @Table(name = "guests") // table name
 public class Guest {
 
-    @Id // Primary Key එක
+    @Id // Primary Key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID auto increment
     private Long guestId;
 
@@ -16,14 +16,14 @@ public class Guest {
     private String phone;
     private String email;
 
-    // 2. අලුතෙන් එකතු කළ කොටස: Register වෙන වෙලාව
-    @Column(updatable = false) // මේ වෙලාව පස්සේ වෙනස් වෙන්න බෑ
+    // 2. Newly added part: Registration time
+    @Column(updatable = false) // This time cannot be changed later
     private LocalDateTime checkInTime;
 
-    // 3. Guest කෙනෙක් Save වෙද්දී ඉබේම වෙලාව වැටෙන ෆන්ක්ෂන් එක
+    // 3. Function to automatically set time when a Guest is saved
     @PrePersist
     protected void onCreate() {
-        this.checkInTime = LocalDateTime.now(); // දැන් වෙලාව ගන්නවා
+        this.checkInTime = LocalDateTime.now(); // Gets the current time
     }
 
     // empty Constructor
@@ -79,7 +79,7 @@ public class Guest {
         this.email = email;
     }
 
-    // 4. වෙලාව ගන්න අලුත් Getter සහ Setter එක
+    // 4. New Getter and Setter to get the time
     public LocalDateTime getCheckInTime() {
         return checkInTime;
     }

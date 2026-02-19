@@ -1,206 +1,58 @@
-"use client";
-import { useState, useEffect } from "react";
+import Link from "next/link";
 
-export default function GuestManagement() {
-  // --- STATE ---
-  const [view, setView] = useState("checkin");
-  const [guests, setGuests] = useState<any[]>([]); // Guest List
-  const [stats, setStats] = useState({ total: 0, today: 0 }); // Real Stats
-
-  // Form Data
-  const [formData, setFormData] = useState({
-    name: "",
-    nic: "",
-    email: "",
-    phone: "",
-  });
-
-  const [status, setStatus] = useState({ type: "", message: "" });
-  const [isLoading, setIsLoading] = useState(false);
-
-  // --- FUNCTIONS ---
-
-  // 1. Load Data & Calculate Stats
-  const fetchGuestsAndStats = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/guests");
-      if (response.ok) {
-        const data = await response.json();
-        setGuests(data);
-
-        // --- REAL TIME CALCULATIONS ---
-        // 1. Total Guests
-        const totalCount = data.length;
-
-        // 2. Today's Arrivals (Filter by Date)
-        const todayStr = new Date().toISOString().split('T')[0]; // Get "2023-10-25" format
-        const todayCount = data.filter((g: any) => 
-          g.checkInTime && g.checkInTime.startsWith(todayStr)
-        ).length;
-
-        setStats({ total: totalCount, today: todayCount });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  // Page Load වෙද්දී Data ගන්න
-  useEffect(() => {
-    fetchGuestsAndStats();
-  }, []);
-
-  const handleChange = (e: any) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setStatus({ type: "loading", message: "Processing Check-In..." });
-
-    try {
-      const response = await fetch("http://localhost:8080/api/guests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setStatus({ type: "success", message: "🎉 Guest Checked-In Successfully!" });
-        setFormData({ name: "", nic: "", email: "", phone: "" });
-        fetchGuestsAndStats(); // Refresh stats immediately
-      } else {
-        setStatus({ type: "error", message: "❌ Check-In Failed." });
-      }
-    } catch (error) {
-      setStatus({ type: "error", message: "⚠️ Server Error." });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50 flex font-sans">
-      {/* SIDEBAR */}
-      <aside className="w-64 bg-slate-900 text-white hidden md:flex flex-col shadow-2xl">
-        <div className="p-6 border-b border-slate-800">
-          <h1 className="text-2xl font-bold text-blue-400">SMART HOTEL</h1>
-          <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">Guest Manager</p>
-        </div>
-        <nav className="mt-6 flex-1">
-          <button onClick={() => setView("checkin")} className={`w-full flex items-center py-4 px-6 ${view === "checkin" ? "bg-blue-600 border-r-4 border-blue-300" : "text-slate-400 hover:bg-slate-800"}`}>
-            <span className="font-medium">Guest Check-In</span>
-          </button>
-          <button onClick={() => setView("history")} className={`w-full flex items-center py-4 px-6 ${view === "history" ? "bg-blue-600 border-r-4 border-blue-300" : "text-slate-400 hover:bg-slate-800"}`}>
-            <span className="font-medium">Guest History</span>
-          </button>
-        </nav>
-      </aside>
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-800">{view === "checkin" ? "Guest Registration" : "Guest Database"}</h2>
-            <p className="text-slate-500 text-sm mt-1">Real-time System Status</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm font-bold text-slate-700">Reception Desk</p>
-            <p className="text-xs text-green-600 font-semibold">● Online</p>
-          </div>
-        </header>
+      {/* Header Section */}
+      <div className="text-center mb-10">
+        <h1 className="text-5xl font-bold text-slate-900 mb-2">SMART HOTEL</h1>
+        <p className="text-slate-500 text-lg uppercase tracking-widest">Management System Portal</p>
+      </div>
 
-        {view === "checkin" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* FORM */}
-            <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-              <h3 className="font-semibold text-slate-700 mb-6 border-b pb-2">New Guest Entry</h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. Kasun Perera" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">NIC / Passport</label>
-                    <input type="text" name="nic" value={formData.nic} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="ID Number" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Email</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email Address" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Phone</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Phone Number" />
-                  </div>
-                </div>
-                {status.message && <div className={`p-3 rounded text-sm font-medium ${status.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{status.message}</div>}
-                <button type="submit" disabled={isLoading} className="w-full py-3 rounded-lg text-white font-bold bg-blue-600 hover:bg-blue-700 transition">{isLoading ? "Processing..." : "Check-In Guest"}</button>
-              </form>
+      {/* Modules Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full">
+
+        {/* Card 1: Guest Service (This is working now) */}
+        <Link href="/guest" className="group">
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+              <span className="text-2xl">👥</span>
             </div>
-
-            {/* REAL STATS PANEL */}
-            <div className="lg:col-span-1 space-y-6">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                <h4 className="text-slate-500 text-xs font-bold uppercase mb-4 border-b pb-2">Today's Summary</h4>
-                
-                {/* 1. New Arrivals / Today */}
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-slate-600 font-medium">New Arrivals / Today</span>
-                  <span className="font-bold text-white text-lg bg-green-500 px-3 py-1 rounded shadow-sm">
-                    {stats.today}
-                  </span>
-                </div>
-
-                {/* 2. Total Guests */}
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600 font-medium">Total Guests</span>
-                  <span className="font-bold text-slate-800 text-lg bg-slate-100 px-3 py-1 rounded border border-slate-200">
-                    {stats.total}
-                  </span>
-                </div>
-
-              </div>
-              
-              <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 text-sm text-blue-800">
-                💡 <b>System Note:</b> These counts are updated in real-time from the database.
-              </div>
-            </div>
+            <h3 className="text-xl font-bold text-slate-800 group-hover:text-blue-600">Guest Management</h3>
+            <p className="text-slate-500 mt-2 text-sm">Register guests, view history, and manage profiles.</p>
           </div>
-        )}
+        </Link>
 
-        {view === "history" && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="font-semibold text-slate-700">All Registered Guests</h3>
-              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded font-bold">Total: {guests.length}</span>
+        {/* Card 2: Housekeeping (Friend needs to build this) */}
+        <Link href="/housekeeping" className="group">
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-600 transition-colors">
+              <span className="text-2xl">🧹</span>
             </div>
-            <table className="w-full text-left">
-              <thead className="bg-slate-100 text-slate-500 text-xs uppercase">
-                <tr>
-                  <th className="px-6 py-3">ID</th>
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3">NIC</th>
-                  <th className="px-6 py-3">Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {guests.map((g: any) => (
-                  <tr key={g.guestId} className="hover:bg-blue-50">
-                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">#{g.guestId}</td>
-                    <td className="px-6 py-3 font-medium text-slate-800">{g.name}</td>
-                    <td className="px-6 py-3 text-slate-600 text-sm">{g.nic}</td>
-                    <td className="px-6 py-3 text-slate-400 text-xs">
-                      {g.checkInTime ? new Date(g.checkInTime).toLocaleDateString() : "N/A"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <h3 className="text-xl font-bold text-slate-800 group-hover:text-orange-600">Housekeeping</h3>
+            <p className="text-slate-500 mt-2 text-sm">Manage room cleaning, tasks, and staff assignments.</p>
           </div>
-        )}
-      </main>
+        </Link>
+
+        {/* Card 3: Restaurant (Friend needs to build this) */}
+        <Link href="/restaurant" className="group">
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition-colors">
+              <span className="text-2xl">🍽️</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 group-hover:text-green-600">Restaurant</h3>
+            <p className="text-slate-500 mt-2 text-sm">Manage food orders, menus, and dining services.</p>
+          </div>
+        </Link>
+
+        {/* Can add more Cards here if needed... */}
+
+      </div>
+
+      <div className="mt-12 text-slate-400 text-sm">
+        © 2026 Smart Hotel System | Global Architecture Team
+      </div>
     </div>
   );
 }
