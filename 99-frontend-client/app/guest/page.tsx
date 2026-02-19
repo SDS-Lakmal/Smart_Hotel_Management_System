@@ -1,11 +1,20 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Link from "next/link"; // Imported Link
+
+interface Guest {
+  guestId?: number;
+  name: string;
+  nic: string;
+  phone: string;
+  email: string;
+  checkInTime?: string;
+}
 
 export default function GuestManagement() {
   // --- STATE ---
   const [view, setView] = useState("checkin");
-  const [guests, setGuests] = useState<any[]>([]); // Guest List
+  const [guests, setGuests] = useState<Guest[]>([]); // Guest List
   const [stats, setStats] = useState({ total: 0, today: 0 }); // Real Stats
 
   // Form Data
@@ -32,14 +41,14 @@ export default function GuestManagement() {
         // --- REAL TIME CALCULATIONS ---
         const totalCount = data.length;
         const todayStr = new Date().toISOString().split('T')[0];
-        const todayCount = data.filter((g: any) =>
+        const todayCount = data.filter((g: Guest) =>
           g.checkInTime && g.checkInTime.startsWith(todayStr)
         ).length;
 
         setStats({ total: totalCount, today: todayCount });
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    } catch {
+      console.error("Error fetching data");
     }
   };
 
@@ -48,11 +57,11 @@ export default function GuestManagement() {
     fetchGuestsAndStats();
   }, []);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setStatus({ type: "loading", message: "Processing Check-In..." });
@@ -71,7 +80,7 @@ export default function GuestManagement() {
       } else {
         setStatus({ type: "error", message: "❌ Check-In Failed." });
       }
-    } catch (error) {
+    } catch {
       setStatus({ type: "error", message: "⚠️ Server Error." });
     } finally {
       setIsLoading(false);
@@ -172,7 +181,7 @@ export default function GuestManagement() {
             {/* REAL STATS PANEL */}
             <div className="lg:col-span-1 space-y-6">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                <h4 className="text-slate-500 text-xs font-bold uppercase mb-4 border-b pb-2">Today's Summary</h4>
+                <h4 className="text-slate-500 text-xs font-bold uppercase mb-4 border-b pb-2">Today&apos;s Summary</h4>
 
                 {/* 1. New Arrivals / Today */}
                 <div className="flex justify-between items-center mb-4">
@@ -215,7 +224,7 @@ export default function GuestManagement() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {guests.map((g: any) => (
+                {guests.map((g: Guest) => (
                   <tr key={g.guestId} className="hover:bg-blue-50">
                     <td className="px-6 py-3 text-slate-500 font-mono text-xs">#{g.guestId}</td>
                     <td className="px-6 py-3 font-medium text-slate-800">{g.name}</td>
