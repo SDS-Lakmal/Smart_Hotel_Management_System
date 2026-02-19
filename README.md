@@ -105,7 +105,7 @@ Create a new branch for your features.
 
 Do not commit .vscode folder or .env files.
 
-FRONT END
+--------------------FRONT END--------------------------------------------------------------------------------------------------------------------------------------------------
 
 1. Primary Brand Color
 
