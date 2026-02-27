@@ -52,7 +52,7 @@ JSON
             "name": "Run Guest Service", # change this according to your part ( eg: Run Reservation System ) 
             "request": "launch",
             "mainClass": "com.smarthotel.guest_service.GuestServiceApplication",
-            "projectName": "02-guest-service", # for example
+            "projectName": "guest-service", # for example
             "env": {
                 "DB_PASSWORD": "YOUR_REAL_PASSWORD_HERE"
             }
@@ -62,7 +62,7 @@ JSON
             "name": "Run Inventory Service",
             "request": "launch",
             "mainClass": "com.smarthotel.inventory_service.InventoryServiceApplication",
-            "projectName": "04-inventory-service",
+            "projectName": "inventory-service",
             "env": {
                 "DB_PASSWORD": "YOUR_REAL_PASSWORD_HERE"
             }
