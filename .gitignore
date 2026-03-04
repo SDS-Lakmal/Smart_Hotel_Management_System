@@ -1,0 +1,35 @@
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+
+# OS verification
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Build results
+target/
+build/
+dist/
+out/
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temp files
+tmp/
+temp/
+
+# Environment variables
+.vscode/
