@@ -1,0 +1,26 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: housekeeping-service
+  datasource:
+    url: jdbc:h2:mem:hotel_management
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
