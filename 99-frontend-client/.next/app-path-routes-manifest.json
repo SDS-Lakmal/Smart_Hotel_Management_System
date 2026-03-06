@@ -1,0 +1,12 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/guest/page": "/guest",
+  "/housekeeping/page": "/housekeeping",
+  "/housekeeping/rooms/page": "/housekeeping/rooms",
+  "/housekeeping/schedule/page": "/housekeeping/schedule",
+  "/housekeeping/staff/page": "/housekeeping/staff",
+  "/housekeeping/tasks/page": "/housekeeping/tasks",
+  "/page": "/"
+}

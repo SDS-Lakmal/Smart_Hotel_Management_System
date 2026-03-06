@@ -1,0 +1,3 @@
+module.exports=[62245,a=>{"use strict";var b=a.i(87924);function c({error:a,reset:c}){return(0,b.jsx)("div",{className:"flex min-h-screen items-center justify-center bg-gray-100 p-4",children:(0,b.jsxs)("div",{className:"max-w-md rounded-lg bg-white p-6 shadow-lg",children:[(0,b.jsx)("h1",{className:"mb-4 text-2xl font-bold text-red-600",children:"Something went wrong"}),(0,b.jsx)("p",{className:"mb-4 text-gray-700",children:a?.message||"An unexpected error occurred."}),(0,b.jsx)("button",{onClick:c,className:"rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700",children:"Try again"})]})})}a.s(["default",()=>c])}];
+
+//# sourceMappingURL=app_housekeeping_error_tsx_9bca9dbe._.js.map

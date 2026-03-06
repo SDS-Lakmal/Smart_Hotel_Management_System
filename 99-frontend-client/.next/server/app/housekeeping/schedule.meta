@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/housekeeping/layout,_N_T_/housekeeping/schedule/layout,_N_T_/housekeeping/schedule/page,_N_T_/housekeeping/schedule"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/housekeeping/schedule/__PAGE__",
+    "/housekeeping/schedule",
+    "/housekeeping",
+    "/_index",
+    "/_head"
+  ]
+}

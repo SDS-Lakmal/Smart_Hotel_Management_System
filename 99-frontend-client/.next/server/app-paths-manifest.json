@@ -1,0 +1,12 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/guest/page": "app/guest/page.js",
+  "/housekeeping/page": "app/housekeeping/page.js",
+  "/housekeeping/rooms/page": "app/housekeeping/rooms/page.js",
+  "/housekeeping/schedule/page": "app/housekeeping/schedule/page.js",
+  "/housekeeping/staff/page": "app/housekeeping/staff/page.js",
+  "/housekeeping/tasks/page": "app/housekeeping/tasks/page.js",
+  "/page": "app/page.js"
+}
