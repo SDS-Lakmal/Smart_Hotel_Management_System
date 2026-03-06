@@ -16,19 +16,19 @@ const ROLE_CONFIG: Record<
     ADMIN: {
         label: "Admin",
         icon: "👑",
-        color: "from-violet-600 to-purple-700",
+        color: "bg-blue-600 text-white",
         desc: "Full system access · Add, Edit, Delete staff",
     },
     MANAGER: {
         label: "Manager",
         icon: "🛂",
-        color: "from-blue-600 to-cyan-600",
+        color: "bg-teal-600 text-white",
         desc: "View & Edit staff · No delete permission",
     },
     STAFF: {
         label: "Staff",
         icon: "👤",
-        color: "from-emerald-600 to-teal-600",
+        color: "bg-slate-600 text-white",
         desc: "View-only access to staff records",
     },
 };
@@ -89,37 +89,35 @@ export default function StaffLogin({
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-            {/* Glow orbs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -left-40 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
-            </div>
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans relative overflow-hidden">
+            {/* Background Decorations */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/5 rounded-full blur-3xl" />
 
             <div className="relative w-full max-w-md">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-2xl mb-4">
-                        <span className="text-3xl">🏨</span>
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/20 mb-4">
+                        <span className="text-3xl text-white">🏨</span>
                     </div>
-                    <h1 className="text-3xl font-bold text-white">Smart Hotel</h1>
-                    <p className="text-slate-400 mt-1 text-sm tracking-wide">
+                    <h1 className="text-3xl font-black text-slate-800">Smart Hotel</h1>
+                    <p className="text-slate-500 font-bold mt-1 text-sm tracking-wide uppercase">
                         Staff Management System
                     </p>
                 </div>
 
                 {/* Card */}
-                <div className="bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
-                    <h2 className="text-white font-semibold text-lg mb-1">
+                <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-xl">
+                    <h2 className="text-slate-800 font-bold text-lg mb-1">
                         Sign In to your account
                     </h2>
-                    <p className="text-slate-400 text-sm mb-6">
+                    <p className="text-slate-500 text-sm font-medium mb-6">
                         Access is controlled by your role
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                            <label className="block text-sm font-bold text-slate-700 mb-1.5">
                                 Username
                             </label>
                             <input
@@ -127,13 +125,13 @@ export default function StaffLogin({
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 placeholder="admin / manager / staff"
-                                className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all font-medium shadow-sm"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                            <label className="block text-sm font-bold text-slate-700 mb-1.5">
                                 Password
                             </label>
                             <input
@@ -141,21 +139,21 @@ export default function StaffLogin({
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••"
-                                className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all font-medium shadow-sm"
                                 required
                             />
                         </div>
 
                         {error && (
-                            <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
-                                <span className="text-red-400 text-sm">⚠️ {error}</span>
+                            <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl">
+                                <span className="text-red-600 text-sm font-bold">⚠️ {error}</span>
                             </div>
                         )}
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 px-6 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-violet-900/40 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md shadow-blue-600/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {loading ? (
                                 <>
@@ -169,20 +167,20 @@ export default function StaffLogin({
                     </form>
 
                     {/* Quick login buttons */}
-                    <div className="mt-6 pt-6 border-t border-slate-700">
-                        <p className="text-slate-500 text-xs font-medium uppercase tracking-wider mb-3">
+                    <div className="mt-8 pt-6 border-t border-slate-100">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-4 text-center">
                             Quick Demo Login
                         </p>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-3 gap-3">
                             {(Object.entries(ROLE_CONFIG) as [Role, (typeof ROLE_CONFIG)[Role]][]).map(
                                 ([role, conf]) => (
                                     <button
                                         key={role}
                                         onClick={() => quickLogin(role)}
-                                        className={`flex flex-col items-center gap-1 p-2.5 bg-gradient-to-b ${conf.color} opacity-80 hover:opacity-100 rounded-xl transition-all text-white`}
+                                        className={`flex flex-col items-center gap-1.5 p-3 ${conf.color} hover:brightness-110 shadow-sm rounded-xl transition-all`}
                                     >
                                         <span className="text-xl">{conf.icon}</span>
-                                        <span className="text-xs font-semibold">{conf.label}</span>
+                                        <span className="text-xs font-bold">{conf.label}</span>
                                     </button>
                                 )
                             )}
@@ -191,19 +189,19 @@ export default function StaffLogin({
                 </div>
 
                 {/* Role permission guide */}
-                <div className="mt-4 space-y-2">
+                <div className="mt-6 space-y-3">
                     {(Object.entries(ROLE_CONFIG) as [Role, (typeof ROLE_CONFIG)[Role]][]).map(
                         ([role, conf]) => (
                             <div
                                 key={role}
-                                className="flex items-center gap-3 px-4 py-2 bg-slate-800/30 rounded-xl border border-slate-700/30"
+                                className="flex items-center gap-4 px-5 py-3 bg-white shadow-sm rounded-xl border border-slate-200"
                             >
-                                <span>{conf.icon}</span>
+                                <span className="p-2 bg-slate-50 rounded-lg">{conf.icon}</span>
                                 <div>
-                                    <span className="text-white text-xs font-semibold">
+                                    <span className="text-slate-800 text-sm font-bold block mb-0.5">
                                         {conf.label}
                                     </span>
-                                    <span className="text-slate-500 text-xs"> · {conf.desc}</span>
+                                    <span className="text-slate-500 text-xs font-medium">{conf.desc}</span>
                                 </div>
                             </div>
                         )
