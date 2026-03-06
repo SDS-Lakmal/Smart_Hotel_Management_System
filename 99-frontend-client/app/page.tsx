@@ -49,6 +49,15 @@ export default function Home() {
           </div>
         </Link>
 
+        <Link href="/staff" className="group">
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-teal-500 transition-all duration-300 transform hover:-translate-y-1 h-full">
+            <div className="h-12 w-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-teal-600 transition-colors">
+              <span className="text-2xl">👨‍💼</span>
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 group-hover:text-teal-600">Staff Management</h3>
+            <p className="text-slate-500 mt-2 text-sm">Admin panel for handling employee records and roles.</p>
+          </div>
+        </Link>
 
         <Link href="/housekeeping" className="group">
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-orange-500 transition-all duration-300 transform hover:-translate-y-1 h-full">
