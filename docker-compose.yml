@@ -40,6 +40,42 @@ services:
     networks:
       - hotel-network
 
+  reservation-service:
+    build: ./03-reservation-service
+    container_name: reservation-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/reservation_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - discovery-server
+      - mysql
+    networks:
+      - hotel-network
+
+  room-service:
+    build: ./04-room-service
+    container_name: room-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/room_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - discovery-server
+      - mysql
+    networks:
+      - hotel-network
+
   mysql:
     image: mysql:8.0
     container_name: mysql
