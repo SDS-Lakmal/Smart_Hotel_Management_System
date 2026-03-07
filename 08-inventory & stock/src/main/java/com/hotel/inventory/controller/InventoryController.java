@@ -14,7 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/inventory")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+// Allow local frontend dev origins (Next dev runs on :3000)
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class InventoryController {
 
     private final InventoryService inventoryService;

@@ -1,7 +1,9 @@
 import axios from 'axios';
 import type { InventoryItem } from '@/types/inventory';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
+// Default to the proxied path so Next dev server will proxy requests to the backend.
+// If you want to target the backend directly, set NEXT_PUBLIC_API_URL in .env.local
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? '/api';
 
 export const api = axios.create({
   baseURL: API_BASE,
